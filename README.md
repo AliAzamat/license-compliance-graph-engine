@@ -86,11 +86,3 @@ curl -X POST localhost:8000/compliance/checklist \
 | `app/api/routes/compliance.py` | `POST /compliance/checklist` |
 | `app/repositories/audit.py` | Append-only audit writes |
 | `app/models/schema.sql` | `nodes`, `edges`, `audit_log` |
-
-## Status
-
-- **Bug: the traversal query needs `WITH RECURSIVE`.** It defines a recursive CTE with a plain `WITH`, so Postgres rejects it. Changing `WITH ent AS` to `WITH RECURSIVE ent AS` in `app/graph/traversal.py` fixes it; that's the only change needed for the example above.
-- **No ingestion path for entities.** The loader creates states, license types, and requirements, but nothing creates `entity` nodes or `holds`/`operates_in` edges yet — they have to be inserted directly.
-- **No document-ingestion endpoint;** `extract()` is called from code, and PDF-to-text conversion isn't included.
-- A recurring requirement that has never been filed is scheduled one interval from today and marked `upcoming`, rather than flagged as missing.
-- No dependency file or tests.
